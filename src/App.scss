@@ -1,0 +1,147 @@
+@import "fundamentalProperties";
+
+:root {
+  @media screen and (max-width: $mobile-screen-size) {
+    font-size: $mobile-font-size;
+  }
+}
+
+@mixin flexCenter() {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.App {
+  height: 100vh;
+  overflow: auto;
+  background-image: linear-gradient(
+    0deg,
+    hsl(227deg 49% 17%) 0%,
+    hsl(224deg 48% 18%) 24%,
+    hsl(222deg 48% 19%) 35%,
+    hsl(220deg 48% 20%) 45%,
+    hsl(218deg 48% 21%) 55%,
+    hsl(217deg 47% 21%) 65%,
+    hsl(216deg 47% 22%) 76%,
+    hsl(215deg 47% 23%) 100%
+  );
+}
+
+//  HEADER STYLES
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-self: center;
+  max-width: 700px;
+  margin: 0 auto;
+  border: 0.2rem solid $header-border-color;
+  border-radius: 10px;
+  padding: 0.5rem;
+
+  &__logo {
+    padding: 1rem;
+    align-self: center;
+  }
+
+  &__score-box {
+    @include flexCenter();
+    flex-direction: column;
+    width: 7rem;
+    margin: 0.5rem;
+    color: white;
+    background-color: white;
+    border-radius: 10px;
+
+    &__text {
+      font-size: 0.9rem;
+      color: $score-text-color;
+      letter-spacing: 0.2rem;
+    }
+    &__number {
+      font-size: 4rem;
+      line-height: 80%;
+      color: $score-number-color;
+    }
+  }
+
+  &--wrapper {
+    padding: 2rem;
+  }
+}
+
+// GAME BUTTON STYLES
+
+.game-btn-container {
+  @include flexCenter();
+  max-width: 700px;
+  margin: 0 auto;
+  gap: 2rem;
+}
+
+// Inner and outer shade of the buttons
+@mixin buttonShade($border-color-arg, $position) {
+  $shade-color: darken($border-color-arg, 20%);
+  $shadow-size: $game-btn-dimensions/30;
+  @if $position == "top" {
+    border-top: $shadow-size solid $shade-color;
+  } @else if $position == "bottom" {
+    border-bottom: $shadow-size solid $shade-color;
+  }
+  background-size: $game-btn-dimensions/15 100%;
+}
+
+// Button dimensions that dynamically scale them
+$game-btn-dimensions: 150px;
+$game-btn-padding: $game-btn-dimensions/9;
+
+// Retreiving the button colors based on type
+@mixin gameButtonType($type) {
+  background: map-get($border-color-gradients, $type);
+  @include buttonShade(map-get($border-color-shades, $type), bottom);
+}
+
+.game-btn {
+  @include flexCenter();
+  height: $game-btn-dimensions - (2 * $game-btn-padding);
+  width: $game-btn-dimensions - (2 * $game-btn-padding);
+  background-color: hsl(0, 0%, 100%);
+  border-radius: 50%;
+
+  // Shade fo the inner white part
+  @include buttonShade(hsl(0, 0%, 90%), top);
+
+  &--wrapper {
+    @include flexCenter();
+    height: $game-btn-dimensions;
+    width: $game-btn-dimensions;
+    border-radius: 50%;
+    padding: $game-btn-padding;
+
+    &.rock {
+      @include gameButtonType(rock);
+    }
+
+    &.scissors {
+      @include gameButtonType(scissors);
+    }
+
+    &.paper {
+      @include gameButtonType(paper);
+    }
+
+    &.lizard {
+      @include gameButtonType(lizard);
+    }
+
+    &.spock {
+      @include gameButtonType(spock);
+    }
+  }
+
+  // Button icon dimensions
+  &__icon {
+    width: $game-btn-dimensions/3;
+  }
+}
