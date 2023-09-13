@@ -1,0 +1,65 @@
+$toggle-btn-height: 2rem;
+$toggle-btn-sliderHeight: 3rem;
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: calc($toggle-btn-height + $toggle-btn-sliderHeight);
+  height: $toggle-btn-height;
+
+  &--wrapper {
+    position: absolute;
+    bottom: 1.5rem;
+    left: 1.5rem;
+  }
+
+  &__text {
+    color: white;
+    width: max-content;
+    position: absolute;
+    top: -2rem;
+  }
+  input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  &:has(input:checked) {
+    .switch__slider {
+      background-color: hsl(229, 64%, 46%);
+      transition: all 500ms;
+    }
+  }
+
+  &__slider {
+    position: absolute;
+    cursor: pointer;
+    inset: 0;
+    background-color: black;
+    border-radius: 5rem;
+
+    &::before {
+      position: absolute;
+      content: "";
+      width: $toggle-btn-sliderHeight;
+      height: $toggle-btn-sliderHeight;
+      top: 50%;
+
+      transform: translateY(-50%);
+
+      background-color: white;
+      border-radius: 50%;
+      background-image: url(/images/icon-lizard.svg);
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: calc($toggle-btn-sliderHeight - 1rem);
+      transition: all 200ms linear;
+
+      input:checked + & {
+        transform: translate($toggle-btn-sliderHeight, -50%);
+      }
+    }
+  }
+}

@@ -7,8 +7,14 @@
   font-family: "Barlow Semi Condensed", sans-serif;
 }
 
+@mixin flexCenter() {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 $mobile-font-size: 12px;
-$mobile-screen-size: 450px;
+$mobile-screen-size: 500px;
 
 $score-text-color: hsl(229, 64%, 46%);
 $header-border-color: hsl(217, 16%, 45%);
@@ -29,3 +35,13 @@ $border-color-shades: (
   "spock": hsl(189, 59%, 53%),
   "lizard": hsl(261, 73%, 60%),
 );
+
+// Get rid of the initial button styling
+button {
+  padding: 0;
+  border: none;
+  outline: none;
+  font: inherit;
+  color: inherit;
+  background: none;
+}

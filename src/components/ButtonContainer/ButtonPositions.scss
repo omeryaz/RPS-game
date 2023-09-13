@@ -1,0 +1,116 @@
+@import "./../../fundamentalProperties";
+
+// BACKGROUND SVG
+
+.bg-svg {
+  position: absolute;
+  top: 15%;
+  transform: rotate(180deg);
+  &.bonus {
+    transform: rotate(90deg);
+    top: 30%;
+  }
+}
+
+// NORMAL MODE
+
+$sides-percentage-mobile: 5%;
+$top-percentage-mobile: 20%;
+
+$sides-percentage-desktop: 18%;
+$top-percentage-desktop: 20%;
+
+.left {
+  position: absolute;
+  top: $top-percentage-desktop;
+  left: $sides-percentage-desktop;
+  @media screen and (max-width: $mobile-screen-size) {
+    top: $top-percentage-mobile;
+    left: $sides-percentage-mobile;
+  }
+}
+
+.right {
+  position: absolute;
+  top: $top-percentage-desktop;
+  right: $sides-percentage-desktop;
+  @media screen and (max-width: $mobile-screen-size) {
+    top: $top-percentage-mobile;
+    right: $sides-percentage-mobile;
+  }
+}
+
+.bottom-center {
+  position: absolute;
+  top: 65%;
+}
+
+// BONUS MODE
+
+// CENTER PEAK ELEMENT
+.center {
+  position: absolute;
+  top: 10%;
+}
+
+// TOP SIDE ELEMENTS
+
+// DESKTOP
+$bonus-top-horizontal-percentage-desktop: 15%;
+$bonus-top-vertical-percentage-desktop: 35%;
+// MOBILE
+$bonus-top-horizontal-percentage-mobile: 5%;
+$bonus-top-vertical-percentage-mobile: 35%;
+
+.top-right {
+  position: absolute;
+  top: $bonus-top-vertical-percentage-desktop;
+  right: $bonus-top-horizontal-percentage-desktop;
+
+  @media screen and (max-width: $mobile-screen-size) {
+    top: $bonus-top-vertical-percentage-mobile;
+    right: $bonus-top-horizontal-percentage-mobile;
+  }
+}
+
+.top-left {
+  position: absolute;
+  top: $bonus-top-vertical-percentage-desktop;
+  left: $bonus-top-horizontal-percentage-desktop;
+
+  @media screen and (max-width: $mobile-screen-size) {
+    top: $bonus-top-vertical-percentage-mobile;
+    left: $bonus-top-horizontal-percentage-mobile;
+  }
+}
+
+// BOTTOM SIDE ELEMENTS
+
+// DESKTOP
+$bonus-bottom-horizontal-percentage-desktop: 23%;
+$bonus-bottom-vertical-percentage-desktop: -10%;
+//MOBILE
+$bonus-bottom-horizontal-percentage-mobile: 15%;
+$bonus-bottom-vertical-percentage-mobile: -10%;
+
+.bottom-right {
+  position: absolute;
+  right: $bonus-bottom-horizontal-percentage-desktop;
+  bottom: $bonus-bottom-vertical-percentage-desktop;
+
+  @media screen and (max-width: $mobile-screen-size) {
+    right: $bonus-bottom-horizontal-percentage-mobile;
+    bottom: $bonus-bottom-vertical-percentage-mobile;
+  }
+}
+
+.bottom-left {
+  position: absolute;
+  left: $bonus-bottom-horizontal-percentage-desktop;
+  bottom: $bonus-bottom-vertical-percentage-desktop;
+
+  @media screen and (max-width: $mobile-screen-size) {
+    left: $bonus-bottom-horizontal-percentage-mobile;
+    bottom: $bonus-bottom-vertical-percentage-mobile;
+  }
+}

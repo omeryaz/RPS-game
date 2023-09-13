@@ -6,12 +6,6 @@
   }
 }
 
-@mixin flexCenter() {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 .App {
   height: 100vh;
   overflow: auto;
@@ -42,6 +36,7 @@
 
   &__logo {
     padding: 1rem;
+    padding-bottom: 0.5rem;
     align-self: center;
   }
 
@@ -75,34 +70,60 @@
 
 .game-btn-container {
   @include flexCenter();
+  width: 100vmin;
   max-width: 700px;
+  height: min(100vmin, 60vmax);
+  max-height: 500px;
   margin: 0 auto;
   gap: 2rem;
+  position: relative;
+  padding: 2rem;
+
+  &--wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50vh;
+  }
 }
 
 // Inner and outer shade of the buttons
-@mixin buttonShade($border-color-arg, $position) {
+@mixin buttonShade($border-color-arg, $position, $dimensions) {
   $shade-color: darken($border-color-arg, 20%);
-  $shadow-size: $game-btn-dimensions/30;
+  $shadow-size: calc($dimensions/ 30);
   @if $position == "top" {
     border-top: $shadow-size solid $shade-color;
   } @else if $position == "bottom" {
     border-bottom: $shadow-size solid $shade-color;
   }
-  background-size: $game-btn-dimensions/15 100%;
+  background-size: calc($dimensions/ 15) 100%;
 }
 
-// Button dimensions that dynamically scale them
-$game-btn-dimensions: 150px;
-$game-btn-padding: $game-btn-dimensions/9;
-
-// Retreiving the button colors based on type
-@mixin gameButtonType($type) {
+// Retreiving the button colors and shades based on type
+@mixin gameButtonType($type, $dimensions) {
   background: map-get($border-color-gradients, $type);
-  @include buttonShade(map-get($border-color-shades, $type), bottom);
+  @include buttonShade(
+    map-get($border-color-shades, $type),
+    bottom,
+    $dimensions
+  );
+  &:hover {
+    box-shadow: 0px 0px 3rem 0.5rem map-get($border-color-shades, $type);
+  }
 }
 
-.game-btn {
+// Removing the borders for click effect
+@mixin clickRemoveBorder {
+  &:active {
+    border: none;
+  }
+}
+
+@mixin buttonConstructor($dimensions) {
+  // Button dimensions that dynamically scale
+  $game-btn-dimensions: $dimensions;
+  $game-btn-padding: calc($game-btn-dimensions/ 9);
+
   @include flexCenter();
   height: $game-btn-dimensions - (2 * $game-btn-padding);
   width: $game-btn-dimensions - (2 * $game-btn-padding);
@@ -110,38 +131,217 @@ $game-btn-padding: $game-btn-dimensions/9;
   border-radius: 50%;
 
   // Shade fo the inner white part
-  @include buttonShade(hsl(0, 0%, 90%), top);
+  @include buttonShade(hsl(0, 0%, 90%), top, $game-btn-dimensions);
+  @include clickRemoveBorder();
 
+  &.placeholder {
+    background-color: hsl(215deg 47% 30%);
+    border: none;
+  }
   &--wrapper {
     @include flexCenter();
     height: $game-btn-dimensions;
     width: $game-btn-dimensions;
     border-radius: 50%;
     padding: $game-btn-padding;
+    // Pushing the background shape behind the buttons
+    z-index: 1;
+    // Move the button down for a better effect when clicked
+    &:active {
+      transform: translateY(calc($game-btn-dimensions/ 100));
+    }
 
     &.rock {
-      @include gameButtonType(rock);
+      @include gameButtonType(rock, $game-btn-dimensions);
+      @include clickRemoveBorder();
     }
 
     &.scissors {
-      @include gameButtonType(scissors);
+      @include gameButtonType(scissors, $game-btn-dimensions);
+      @include clickRemoveBorder();
     }
 
     &.paper {
-      @include gameButtonType(paper);
+      @include gameButtonType(paper, $game-btn-dimensions);
+      @include clickRemoveBorder();
     }
 
     &.lizard {
-      @include gameButtonType(lizard);
+      @include gameButtonType(lizard, $game-btn-dimensions);
+      @include clickRemoveBorder();
     }
 
     &.spock {
-      @include gameButtonType(spock);
+      @include gameButtonType(spock, $game-btn-dimensions);
+      @include clickRemoveBorder();
     }
   }
 
   // Button icon dimensions
   &__icon {
-    width: $game-btn-dimensions/3;
+    width: calc($game-btn-dimensions/3);
+  }
+}
+
+// WINNER ANIMATION
+$winner-animation-width: 2rem;
+
+@keyframes winner-animation {
+  $animation-color: rgb(207, 207, 207, 0.256);
+  0% {
+    box-shadow: 0 0 0px $winner-animation-width $animation-color;
+    opacity: 0;
+  }
+  15% {
+    box-shadow: 0 0 0px $winner-animation-width $animation-color;
+    opacity: 1;
+  }
+  30% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+$animation-duration: 4000ms;
+
+@mixin winnerElement {
+  position: absolute;
+  content: "";
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: -10;
+  border-radius: 50%;
+  animation: $animation-duration ease-in 0ms infinite winner-animation;
+}
+
+.you-win {
+  // First circle
+  &::before {
+    @include winnerElement();
+    padding: 7.5rem;
+    @media screen and (max-width: $mobile-screen-size) {
+      padding: 7rem;
+    }
+  }
+
+  // Second circle
+  &::after {
+    @include winnerElement();
+    padding: calc(7.5rem + $winner-animation-width);
+    @media screen and (max-width: $mobile-screen-size) {
+      padding: calc(7rem + $winner-animation-width);
+    }
+    animation-delay: calc(($animation-duration/6) / 2);
+  }
+
+  .third-circle {
+    @include winnerElement();
+    padding: calc(7.5rem + (2 * $winner-animation-width));
+    @media screen and (max-width: $mobile-screen-size) {
+      padding: calc(7rem + (2 * $winner-animation-width));
+    }
+    animation-delay: calc(($animation-duration/6));
+  }
+}
+
+// Normal game button
+.game-btn {
+  @include buttonConstructor(10rem);
+  @media screen and (max-width: $mobile-screen-size) {
+    @include buttonConstructor(12rem);
+  }
+}
+
+// Bonus mode game button
+.game-btn-bonus {
+  @include buttonConstructor(10rem);
+  @media screen and (max-width: $mobile-screen-size) {
+    @include buttonConstructor(11rem);
+  }
+  @media screen and (max-width: 350px) {
+    @include buttonConstructor(9rem);
+  }
+}
+
+// OUTCOME SCREEN
+
+// Big buttons for the outcome screen
+.game-btn-big {
+  @include buttonConstructor(15rem);
+  @media screen and (max-width: $mobile-screen-size) {
+    @include buttonConstructor(13rem);
+  }
+  @media screen and (max-width: 350px) {
+    @include buttonConstructor(11rem);
+  }
+}
+
+.outcome-screen {
+  display: flex;
+  justify-content: center;
+  gap: 7rem;
+  margin-top: 10rem;
+  @media screen and (max-width: 1050px) {
+    flex-wrap: wrap;
+    gap: 3rem;
+  }
+
+  &__box {
+    @include flexCenter();
+    flex-direction: column;
+    gap: 1rem;
+    position: relative;
+
+    @media screen and (max-width: 1050px) {
+      // Chaging the order so that the result and the play again buton wraps correctly
+      &--center {
+        order: 3;
+        width: 100%;
+      }
+      &--right {
+        order: 2;
+      }
+    }
+  }
+
+  &__text {
+    text-transform: uppercase;
+    font-size: 1.4rem;
+    color: white;
+    position: absolute;
+    top: -5rem;
+    width: max-content;
+  }
+
+  &__text-result {
+    text-transform: uppercase;
+    font-size: 4rem;
+    color: white;
+  }
+
+  &__play-btn {
+    color: $score-number-color;
+    background-color: white;
+    border-radius: 0.5rem;
+    padding: 0.75rem 4rem;
+    text-transform: uppercase;
+    width: max-content;
+    cursor: pointer;
+
+    &:hover {
+      color: hsl(349, 71%, 52%);
+    }
+  }
+
+  &__video {
+    position: fixed;
+    z-index: 1;
+    @media screen and (max-width: $mobile-screen-size) {
+      width: 12rem;
+      height: 9rem;
+    }
   }
 }

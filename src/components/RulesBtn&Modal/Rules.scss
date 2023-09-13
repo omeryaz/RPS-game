@@ -1,0 +1,78 @@
+@import "./../../fundamentalProperties"; // RULES
+.rules {
+  // Rules buttton
+  &-btn {
+    position: absolute;
+    background-color: transparent;
+    border: 0.1rem solid $header-border-color;
+    border-radius: 0.25rem;
+    padding: 0.5rem 1.5rem;
+    color: $header-border-color;
+    right: 2rem;
+    bottom: 2rem;
+    transition: all 0.2s ease-out;
+
+    &:hover {
+      color: lighten($header-border-color, 30);
+      border-color: lighten($header-border-color, 30);
+    }
+
+    &:active {
+      color: lighten($header-border-color, 70);
+      border-color: lighten($header-border-color, 70);
+    }
+    @media screen and (max-width: $mobile-screen-size) {
+      right: 50%;
+      transform: translateX(50%);
+    }
+  }
+
+  // Overlay to darken the background while rules modal is open
+  &-overlay {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 2;
+  }
+
+  // Modal
+  &-modal {
+    position: fixed;
+    background-color: white;
+    border-radius: 0.5rem;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%) translateY(-50%);
+    padding: 1rem;
+    height: max-content;
+    padding: 2rem;
+    z-index: 3;
+
+    &--wrapper {
+      position: relative;
+      height: 100%;
+      @include flexCenter();
+    }
+
+    $rules-text-top: 0;
+    // Rules text in modal
+    &__text {
+      position: absolute;
+      text-transform: uppercase;
+      font-size: 1.5rem;
+      top: $rules-text-top;
+      left: 1.5rem;
+    }
+    // Rules image in modal
+    &__image {
+      margin-top: 3rem;
+    }
+
+    // Rules close button
+    &__close {
+      position: absolute;
+      right: 1rem;
+      top: $rules-text-top;
+    }
+  }
+}
